@@ -1,5 +1,6 @@
 package com.codepath.apps.basictwitter.dialogs;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +37,13 @@ public class ComposeTweetDialog extends DialogFragment {
     public static String DRAFT_TWEET_TEXT = "Draft Tweet Text";
     public static ColorStateList originalTextColor;
 
+    //Context mContext;
+
     public ComposeTweetDialog() { }
+
+    /*public ComposeTweetDialog(final Context context) {
+        mContext = context;
+    }*/
 
     public static ComposeTweetDialog newInstance() {
         return new ComposeTweetDialog();
@@ -43,7 +51,12 @@ public class ComposeTweetDialog extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_compose_tweet, container);
+        /*LinearLayout ll=(LinearLayout) LayoutInflater.from(mContext).inflate(R.layout.fragment_compose_tweet, null);
+        getActivity().setContentView(ll);
+        View view = ll;*/
+
         etNewTweet = (EditText) view.findViewById(R.id.etNewTweet);
         btnPostTweet = (Button) view.findViewById(R.id.btnPostTweet);
         tvCharsRemaining = (TextView) view.findViewById(R.id.tvCharsRemaining);

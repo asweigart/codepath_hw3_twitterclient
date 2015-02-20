@@ -1,15 +1,27 @@
 package com.codepath.apps.basictwitter.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Tweet {
+@Table(name = "Tweets")
+public class Tweet extends Model {
+    @Column(name = "text")
     private String text;
+
+    @Column(name = "uid", index = true)
     private long uid;
+
+    @Column(name = "createdAt")
     private String createdAt;
+
+    @Column(name = "User")
     private User user;
 
     public boolean isFavorited() {
@@ -32,6 +44,11 @@ public class Tweet {
     private boolean retweeted;
     private int favouritesCount;
     private int retweetCount;
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.uid) + " @" + this.user.getName() + ": " + this.text;
+    }
 
     public static Tweet fromJSON(JSONObject jsonObject) {
         Tweet tweet = new Tweet();
@@ -87,7 +104,4 @@ public class Tweet {
         return user;
     }
 
-    public String toString() {
-        return getText() + " - " + getUser().getScreenName();
-    }
 }

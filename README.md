@@ -1,14 +1,14 @@
 # codepath_hw3_twitterclient
 Homework 3 for CodePath Android - A Simple Twitter Client
 
-Time spent: 4 hours
+Time spent: 9 hours
 
 Completed user stories:
 
  * [X] Required: User can sign in to Twitter using OAuth login.
  * [X] Required: User should be displayed the username, name, and body for each tweet
  * [X] Required: User should be displayed the relative timestamp for each tweet "8m", "7h"
- * [ ] Required: User can view more tweets as they scroll with infinite pagination
+ * [X] Required: User can view more tweets as they scroll with infinite pagination
  * [X] Required: User can click a “Compose” icon in the Action Bar on the top right
  * [ ] Required: User can then enter a new tweet and post this to twitter
  * [ ] Required: User is taken back to home timeline with new tweet visible in timeline
@@ -16,7 +16,7 @@ Completed user stories:
 Optional features:
 
  * [ ] Links in tweets are clickable and will launch the web browser (see autolink)
- * [ ] User can see a counter with total number of characters left for tweet
+ * [X] User can see a counter with total number of characters left for tweet
 
 Additional features:
 
@@ -30,7 +30,7 @@ Additional features:
 Bonus features:
 
  * [ ] User can see embedded image media within the tweet detail view
- * [ ] Compose activity is replaced with a modal overlay
+ * [X] Compose activity is replaced with a modal overlay
 
 My added features:
  * [ ] Save unfinished tweet drafts.

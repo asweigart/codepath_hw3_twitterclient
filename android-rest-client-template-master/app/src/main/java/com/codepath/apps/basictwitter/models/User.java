@@ -1,12 +1,24 @@
 package com.codepath.apps.basictwitter.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User {
+@Table(name = "Users")
+public class User extends Model {
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "screenName")
     private String screenName;
+
+    @Column(name = "uid", index = true)
     private long uid;
+
+    @Column(name = "profileImageUrl")
     private String profileImageUrl;
 
     public static User fromJSON(JSONObject jsonObject) {

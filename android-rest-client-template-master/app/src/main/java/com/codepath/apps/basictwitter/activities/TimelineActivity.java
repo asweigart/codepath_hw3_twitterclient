@@ -15,10 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.codepath.apps.basictwitter.R;
 import com.codepath.apps.basictwitter.TwitterApplication;
 import com.codepath.apps.basictwitter.TwitterClient;
 import com.codepath.apps.basictwitter.adapters.TweetArrayAdapter;
+import com.codepath.apps.basictwitter.controllers.EndlessScrollListener;
 import com.codepath.apps.basictwitter.dialogs.ComposeTweetDialog;
 import com.codepath.apps.basictwitter.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -45,6 +48,13 @@ public class TimelineActivity extends ActionBarActivity {
         this.client = TwitterApplication.getRestClient();
         this.populateTimeline();
 
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int totalItemsCount) {
+                customLoadMoreDataFromApi(totalItemsCount);
+            }
+        });
+
         this.tweets = new ArrayList<Tweet>();
         this.aTweets = new TweetArrayAdapter(this, this.tweets); //new ArrayAdapter<Tweet>(this, android.R.layout.simple_list_item_1, this.tweets);
         lvTweets.setAdapter(aTweets);
@@ -60,12 +70,51 @@ public class TimelineActivity extends ActionBarActivity {
                 android.R.color.holo_blue_dark);
     }
 
-    public void populateTimeline() {
-
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+    public void customLoadMoreDataFromApi(int offset) {
+        // find the last tweet, its id will be the max id.
+        long max_id = aTweets.getItem(aTweets.getCount() - 1).getUid() - 1; // minus 1 so it doesn't repeat the last tweet
+        client.getHomeTimeline(max_id, new JsonHttpResponseHandler()  {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                aTweets.addAll(Tweet.fromJSONArray(response)); // TODO - add to beginning
+                ArrayList<Tweet> tweets = Tweet.fromJSONArray(response);
+
+                aTweets.addAll(tweets); // TODO - add to beginning, only add if not in the list already
+                for (int i = 0; i < tweets.size(); i++) {
+                    tweets.get(i).save();
+                    //Log.e("SAVED TWEET", tweets.get(i).toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject responseObject) {
+                Toast.makeText(TimelineActivity.this, getResources().getString(R.string.Unable_to_connect_to_the_internet_right_now), Toast.LENGTH_SHORT).show(); // TODO CHANGE THIS MESSAGE
+            }
+
+
+        });
+    }
+
+    public void populateTimeline() {
+        client.getHomeTimeline(0, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                // first go through and delete all the current tweets from the adapter AND the sqlite db
+                while (aTweets.getCount() > 0) {
+                    Tweet tweetToDelete = aTweets.getItem(0);
+                    //Log.e("DELETING", tweetToDelete.toString());
+                    new Delete().from(Tweet.class).where("uid = ?", tweetToDelete.getId()).execute();
+                    aTweets.remove(tweetToDelete);
+                }
+
+                // Download the latest tweets
+                ArrayList<Tweet> tweets = Tweet.fromJSONArray(response);
+
+                aTweets.addAll(tweets); // TODO - add to beginning, only add if not in the list already
+                for (int i = 0; i < tweets.size(); i++) {
+                    tweets.get(i).save();
+                    //Log.e("SAVED TWEET", tweets.get(i).toString());
+                }
+
                 swipeContainer.setRefreshing(false);
             }
 
