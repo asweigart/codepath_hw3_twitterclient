@@ -15,7 +15,7 @@ public class User extends Model {
     @Column(name = "screenName")
     private String screenName;
 
-    @Column(name = "uid", index = true)
+    @Column(name = "uid", index = true, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long uid;
 
     @Column(name = "profileImageUrl")

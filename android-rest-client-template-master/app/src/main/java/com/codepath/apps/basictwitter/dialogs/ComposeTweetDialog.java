@@ -128,6 +128,10 @@ public class ComposeTweetDialog extends DialogFragment {
 
             }
         });
+
+        // set padding for the three reply/retweet/favorite buttons
+
+
         return view;
     }
 

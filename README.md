@@ -18,8 +18,8 @@ Optional features:
  * [X] Links in tweets are clickable and will launch the web browser (see autolink)
  * [X] User can see a counter with total number of characters left for tweet
  * [X] User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh)
- * [ ] User can open the twitter app offline and see last loaded tweets
- * [ ] Tweets are persisted into sqlite and can be displayed from the local DB
+ * [X] User can open the twitter app offline and see last loaded tweets
+ * [X] Tweets are persisted into sqlite and can be displayed from the local DB
  * [ ] User can tap a tweet to display a "detailed" view of that tweet
  * [ ] User can select "reply" from detail view to respond to a tweet
  * [ ] Improve the user interface and theme the app to feel "twitter branded"

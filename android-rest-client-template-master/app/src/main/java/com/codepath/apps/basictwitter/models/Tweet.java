@@ -15,13 +15,13 @@ public class Tweet extends Model {
     @Column(name = "text")
     private String text;
 
-    @Column(name = "uid", index = true)
+    @Column(name = "uid", index = true, unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long uid;
 
     @Column(name = "createdAt")
     private String createdAt;
 
-    @Column(name = "User")
+    @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
 
     public boolean isFavorited() {

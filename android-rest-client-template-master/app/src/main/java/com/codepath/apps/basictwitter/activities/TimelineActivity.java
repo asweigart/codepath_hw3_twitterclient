@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.codepath.apps.basictwitter.R;
 import com.codepath.apps.basictwitter.TwitterApplication;
 import com.codepath.apps.basictwitter.TwitterClient;
@@ -24,6 +25,7 @@ import com.codepath.apps.basictwitter.adapters.TweetArrayAdapter;
 import com.codepath.apps.basictwitter.controllers.EndlessScrollListener;
 import com.codepath.apps.basictwitter.dialogs.ComposeTweetDialog;
 import com.codepath.apps.basictwitter.models.Tweet;
+import com.codepath.apps.basictwitter.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -31,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TimelineActivity extends ActionBarActivity {
     private TwitterClient client;
@@ -80,6 +83,7 @@ public class TimelineActivity extends ActionBarActivity {
 
                 aTweets.addAll(tweets); // TODO - add to beginning, only add if not in the list already
                 for (int i = 0; i < tweets.size(); i++) {
+                    tweets.get(i).getUser().save();
                     tweets.get(i).save();
                     //Log.e("SAVED TWEET", tweets.get(i).toString());
                 }
@@ -99,19 +103,24 @@ public class TimelineActivity extends ActionBarActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 // first go through and delete all the current tweets from the adapter AND the sqlite db
-                while (aTweets.getCount() > 0) {
+                /*while (aTweets.getCount() > 0) {
                     Tweet tweetToDelete = aTweets.getItem(0);
                     //Log.e("DELETING", tweetToDelete.toString());
                     new Delete().from(Tweet.class).where("uid = ?", tweetToDelete.getId()).execute();
                     aTweets.remove(tweetToDelete);
-                }
+                }*/
+                new Delete().from(Tweet.class).execute();
+                new Delete().from(User.class).execute();
+                aTweets.clear();
 
                 // Download the latest tweets
                 ArrayList<Tweet> tweets = Tweet.fromJSONArray(response);
 
                 aTweets.addAll(tweets); // TODO - add to beginning, only add if not in the list already
                 for (int i = 0; i < tweets.size(); i++) {
+                    tweets.get(i).getUser().save();
                     tweets.get(i).save();
+
                     //Log.e("SAVED TWEET", tweets.get(i).toString());
                 }
 
@@ -121,7 +130,14 @@ public class TimelineActivity extends ActionBarActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject responseObject) {
                 Toast.makeText(TimelineActivity.this, getResources().getString(R.string.Unable_to_connect_to_the_internet_right_now), Toast.LENGTH_SHORT).show();
-                // TODO - should not cause app to fail, go into offline mode instead.
+
+                // clear out list and populate from SQL db
+                aTweets.clear();
+                List<Tweet> cachedTweets = new Select()
+                        .from(Tweet.class)
+                        .orderBy("uid DESC")
+                        .execute();
+                aTweets.addAll(cachedTweets);
                 swipeContainer.setRefreshing(false);
             }
 
