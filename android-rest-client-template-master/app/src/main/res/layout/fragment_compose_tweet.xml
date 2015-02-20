@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="400dp"
+    android:minHeight="100dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Dummy_Chars_Remaining"
+        android:id="@+id/tvCharsRemaining"
+        android:layout_gravity="right" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/etNewTweet"
+        android:lines="3"
+        android:hint="@string/Whats_Happening" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Tweet"
+        android:id="@+id/btnPostTweet"
+        android:onClick="onPostTweet"
+        android:layout_gravity="right" />
+
+
+
+
+
+</LinearLayout>
