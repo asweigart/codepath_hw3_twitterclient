@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,7 @@ public class ComposeTweetDialog extends DialogFragment {
                 // update the character count display and enable/disable tweet button
                 int charsRemaining = 140 - etNewTweet.getText().toString().length();
                 tvCharsRemaining.setText(String.valueOf(charsRemaining));
-                if (charsRemaining < 0) {
+                if (charsRemaining < 0 || charsRemaining == 140) {
                     btnPostTweet.setEnabled(false);
                     tvCharsRemaining.setTextColor(Color.parseColor("#FF0000"));
                 } else {
@@ -97,25 +98,32 @@ public class ComposeTweetDialog extends DialogFragment {
         etNewTweet.requestFocus();
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        // setup onClick for the Tweet button
+        btnPostTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO - check for internet connectivity
+                //Toast.makeText(getActivity(), "Debug: Post Tweet", Toast.LENGTH_SHORT).show();
+                TwitterApplication.getRestClient().postStatus(etNewTweet.getText().toString(), new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        etNewTweet.setText("");
+                        ((TimelineActivity)getActivity()).populateTimeline();
+                        dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        Toast.makeText(getActivity(), getResources().getString(R.string.Unable_to_post_status), Toast.LENGTH_SHORT).show();
+                        Log.e("TWITTER ERROR", error.toString());
+                        dismiss();
+                    }
+                });
+
+            }
+        });
         return view;
     }
 
-
-    public void onPostTweet(View v) {
-        // TODO - check for internet connectivity
-        //Toast.makeText(getActivity(), "Debug: Post Tweet", Toast.LENGTH_SHORT).show();
-        TwitterApplication.getRestClient().postStatus(etNewTweet.getText().toString(), new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                getActivity().getSupportFragmentManager().beginTransaction().remove(ComposeTweetDialog.this).commit();
-                etNewTweet.setText("");
-                ((TimelineActivity)getActivity()).populateTimeline();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.Unable_to_post_status), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 }

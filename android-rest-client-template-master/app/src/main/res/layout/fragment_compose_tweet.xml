@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:text="@string/Tweet"
         android:id="@+id/btnPostTweet"
-        android:onClick="onPostTweet"
         android:layout_gravity="right" />
 
 

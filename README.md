@@ -10,8 +10,8 @@ Completed user stories:
  * [X] Required: User should be displayed the relative timestamp for each tweet "8m", "7h"
  * [X] Required: User can view more tweets as they scroll with infinite pagination
  * [X] Required: User can click a “Compose” icon in the Action Bar on the top right
- * [ ] Required: User can then enter a new tweet and post this to twitter
- * [ ] Required: User is taken back to home timeline with new tweet visible in timeline
+ * [X] Required: User can then enter a new tweet and post this to twitter
+ * [X] Required: User is taken back to home timeline with new tweet visible in timeline
 
 Optional features:
 
@@ -20,7 +20,7 @@ Optional features:
 
 Additional features:
 
- * [ ] User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh)
+ * [X] User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh)
  * [ ] User can open the twitter app offline and see last loaded tweets
  * [ ] Tweets are persisted into sqlite and can be displayed from the local DB
  * [ ] User can tap a tweet to display a "detailed" view of that tweet
