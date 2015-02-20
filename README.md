@@ -1,7 +1,7 @@
 # codepath_hw3_twitterclient
 Homework 3 for CodePath Android - A Simple Twitter Client
 
-Time spent: 9 hours
+Time spent: 10 hours
 
 Completed user stories:
 
@@ -27,6 +27,6 @@ Optional features:
  * [X] Compose activity is replaced with a modal overlay
 
 My added features:
- * [ ] Save unfinished tweet drafts.
+ * [X] Save unfinished tweet drafts.
 
  ![Video Walkthrough](hw3.gif)

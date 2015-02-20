@@ -64,8 +64,6 @@ public class ComposeTweetDialog extends DialogFragment {
 
         originalTextColor = tvCharsRemaining.getTextColors();
 
-        getDialog().setTitle(getResources().getString(R.string.Compose));
-
         // add TextWatcher to track how many characters have been typed
         etNewTweet.addTextChangedListener(new TextWatcher() {
             @Override
@@ -83,7 +81,9 @@ public class ComposeTweetDialog extends DialogFragment {
                 tvCharsRemaining.setText(String.valueOf(charsRemaining));
                 if (charsRemaining < 0 || charsRemaining == 140) {
                     btnPostTweet.setEnabled(false);
-                    tvCharsRemaining.setTextColor(Color.parseColor("#FF0000"));
+                    if (charsRemaining < 0) {
+                        tvCharsRemaining.setTextColor(Color.parseColor("#FF0000")); // don't turn red in 140 case
+                    }
                 } else {
                     btnPostTweet.setEnabled(true);
                     tvCharsRemaining.setTextColor(originalTextColor);
@@ -93,6 +93,11 @@ public class ComposeTweetDialog extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) { }
         });
+
+        // get previous tweet draft (if there is one) and set the tv to it.
+        getDialog().setTitle(getResources().getString(R.string.Compose));
+        SharedPreferences prefs = getActivity().getSharedPreferences(DRAFT_TWEET, 0);
+        etNewTweet.setText(prefs.getString(DRAFT_TWEET_TEXT, ""));
 
         // focus edit text and bring up soft keyboard
         etNewTweet.requestFocus();
