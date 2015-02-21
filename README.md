@@ -20,7 +20,7 @@ Optional features:
  * [X] User can refresh tweets timeline by pulling down to refresh (i.e pull-to-refresh)
  * [X] User can open the twitter app offline and see last loaded tweets
  * [X] Tweets are persisted into sqlite and can be displayed from the local DB
- * [ ] User can tap a tweet to display a "detailed" view of that tweet
+ * [X] User can tap a tweet to display a "detailed" view of that tweet
  * [ ] User can select "reply" from detail view to respond to a tweet
  * [ ] Improve the user interface and theme the app to feel "twitter branded"
  * [ ] User can see embedded image media within the tweet detail view
@@ -28,5 +28,6 @@ Optional features:
 
 My added features:
  * [X] Save unfinished tweet drafts.
+ * [ ] Show favorite count and retweet count in tweet detail view
 
  ![Video Walkthrough](hw3.gif)

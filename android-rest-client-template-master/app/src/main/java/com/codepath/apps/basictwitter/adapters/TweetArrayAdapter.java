@@ -62,7 +62,6 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
         return convertView;
     }
 
-    // Until getRelativeTimeAgo() needs to be called from outside this class, it is fine as a static method here.
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";

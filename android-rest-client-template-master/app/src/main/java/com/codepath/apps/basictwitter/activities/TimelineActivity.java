@@ -1,6 +1,7 @@
 package com.codepath.apps.basictwitter.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
@@ -8,9 +9,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -71,6 +75,17 @@ public class TimelineActivity extends ActionBarActivity {
         });
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_dark);
+
+        // set up click handler for clicking on a tweet
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(TimelineActivity.this, TweetDisplayActivity.class);
+                Tweet tweet = aTweets.getItem(position);
+                i.putExtra("tweet", tweet);
+                startActivity(i);
+            }
+        });
     }
 
     public void customLoadMoreDataFromApi(int offset) {

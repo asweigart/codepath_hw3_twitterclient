@@ -1,5 +1,8 @@
 package com.codepath.apps.basictwitter.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -11,7 +14,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 @Table(name = "Tweets")
-public class Tweet extends Model {
+public class Tweet extends Model implements Parcelable {
+    public Tweet() {}
+
     @Column(name = "text")
     private String text;
 
@@ -32,18 +37,8 @@ public class Tweet extends Model {
         return retweeted;
     }
 
-    public int getFavouritesCount() {
-        return favouritesCount;
-    }
-
-    public int getRetweetCount() {
-        return retweetCount;
-    }
-
     private boolean favorited;
     private boolean retweeted;
-    private int favouritesCount;
-    private int retweetCount;
 
     @Override
     public String toString() {
@@ -58,9 +53,7 @@ public class Tweet extends Model {
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
             tweet.favorited = jsonObject.getBoolean("favorited");
-            //tweet.favouritesCount = jsonObject.getInt("favorites_count");
             tweet.retweeted = jsonObject.getBoolean("retweeted");
-            tweet.retweetCount = jsonObject.getInt("retweet_count");
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -104,4 +97,36 @@ public class Tweet extends Model {
         return user;
     }
 
+
+    private Tweet(Parcel source) {
+        this.text = source.readString();
+        this.createdAt = source.readString();
+        this.uid = source.readLong();
+        boolean[] boolValues = new boolean[2];
+        source.readBooleanArray(boolValues);
+        this.favorited = boolValues[0];
+        this.retweeted = boolValues[1];
+        this.user = source.readParcelable(User.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.text);
+        dest.writeString(this.createdAt);
+        dest.writeLong(this.uid);
+        dest.writeBooleanArray(new boolean[] {this.favorited, this.retweeted});
+        dest.writeParcelable(this.user, 0);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Creator<Tweet> CREATOR = new Parcelable.Creator<Tweet>() {
+        @Override
+        public Tweet createFromParcel(Parcel source) { return new Tweet(source); }
+
+        @Override
+        public Tweet[] newArray(int size) { return new Tweet[size]; }
+    };
 }

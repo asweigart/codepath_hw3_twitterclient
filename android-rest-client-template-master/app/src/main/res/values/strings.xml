@@ -19,4 +19,5 @@
     <string name="Tweet">Tweet</string>
     <string name="Dummy_Chars_Remaining">140</string>
     <string name="Whats_Happening">What\'s happening?</string>
+    <string name="title_activity_tweet_display">TweetDisplayActivity</string>
 </resources>
