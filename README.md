@@ -1,7 +1,7 @@
 # codepath_hw3_twitterclient
 Homework 3 for CodePath Android - A Simple Twitter Client
 
-Time spent: 10 hours
+Time spent: 17 hours
 
 Completed user stories:
 
@@ -28,6 +28,8 @@ Optional features:
 
 My added features:
  * [X] Save unfinished tweet drafts.
- * [ ] Show favorite count and retweet count in tweet detail view
+
+Known bugs:
+ * [X] android:descendantFocusability="blocksDescendants" does not work on the main tweet's TextView after autoLink is enabled. Possible fix described here: https://stackoverflow.com/questions/21891008/a-textview-in-a-listview-s-row-cannot-click-after-setting-descendantfocusabilit
 
  ![Video Walkthrough](hw3.gif)
