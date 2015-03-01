@@ -60,6 +60,10 @@
             android:name=".activities.TweetDisplayActivity"
             android:label="@string/title_activity_tweet_display" >
         </activity>
+        <activity
+            android:name=".activities.UserTimelineActivity"
+            android:label="@string/title_activity_user_timeline" >
+        </activity>
     </application>
 
 </manifest>

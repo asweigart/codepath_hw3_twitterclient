@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvScreenName"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvRealName"
+        android:layout_toRightOf="@+id/tvUTRealName"
         android:text="@string/Dummy_Screen_Name"
         android:paddingLeft="4dp"
         android:textColor="#8899a6" />
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Dummy_Real_Name"
-        android:id="@+id/tvRealName"
+        android:id="@+id/tvUTRealName"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
@@ -52,7 +52,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:text="@string/Dummy_Created_At" />
+        android:text="@string/Dummy_Created_At"
+        android:textColor="#000000" />
 
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"

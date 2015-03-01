@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -39,130 +42,45 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimelineActivity extends ActionBarActivity {
-    private TwitterClient client;
-    private ArrayList<Tweet> tweets;
-    private TweetArrayAdapter aTweets;
-    private ListView lvTweets;
+public class TimelineActivity extends FragmentActivity {
+    FragmentPagerAdapter adapterViewPager;
 
-    private SwipeRefreshLayout swipeContainer;
+    static public String thisUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        this.lvTweets = (ListView) findViewById(R.id.lvTweets);
-        this.client = TwitterApplication.getRestClient();
-        this.populateTimeline();
 
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+        // handle viewpager stuff
+        ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
+        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(adapterViewPager);
+
+        vpPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            // This method will be invoked when a new page becomes selected.
             @Override
-            public void onLoadMore(int totalItemsCount) {
-                customLoadMoreDataFromApi(totalItemsCount);
+            public void onPageSelected(int position) {
+            }
+
+            // This method will be invoked when the current page is scrolled
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Code goes here
+            }
+
+            // Called when the scroll state changes:
+            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Code goes here
             }
         });
 
-        this.tweets = new ArrayList<Tweet>();
-        this.aTweets = new TweetArrayAdapter(this, this.tweets); //new ArrayAdapter<Tweet>(this, android.R.layout.simple_list_item_1, this.tweets);
-        lvTweets.setAdapter(aTweets);
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                populateTimeline();
-            }
-        });
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_blue_dark);
-
-        // set up click handler for clicking on a tweet
-        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(TimelineActivity.this, TweetDisplayActivity.class);
-                Tweet tweet = aTweets.getItem(position);
-                i.putExtra("tweet", tweet);
-                startActivity(i);
-            }
-        });
     }
 
-    public void customLoadMoreDataFromApi(int offset) {
-        // find the last tweet, its id will be the max id.
-        long max_id = aTweets.getItem(aTweets.getCount() - 1).getUid() - 1; // minus 1 so it doesn't repeat the last tweet
-        client.getHomeTimeline(max_id, new JsonHttpResponseHandler()  {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                ArrayList<Tweet> tweets = Tweet.fromJSONArray(response);
-
-                aTweets.addAll(tweets); // TODO - add to beginning, only add if not in the list already
-                for (int i = 0; i < tweets.size(); i++) {
-                    tweets.get(i).getUser().save();
-                    tweets.get(i).save();
-                    //Log.e("SAVED TWEET", tweets.get(i).toString());
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject responseObject) {
-                Toast.makeText(TimelineActivity.this, getResources().getString(R.string.Unable_to_connect_to_the_internet_right_now), Toast.LENGTH_SHORT).show(); // TODO CHANGE THIS MESSAGE
-            }
-
-
-        });
-    }
-
-    public void populateTimeline() {
-        client.getHomeTimeline(0, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                // first go through and delete all the current tweets from the adapter AND the sqlite db
-                /*while (aTweets.getCount() > 0) {
-                    Tweet tweetToDelete = aTweets.getItem(0);
-                    //Log.e("DELETING", tweetToDelete.toString());
-                    new Delete().from(Tweet.class).where("uid = ?", tweetToDelete.getId()).execute();
-                    aTweets.remove(tweetToDelete);
-                }*/
-                new Delete().from(Tweet.class).execute();
-                new Delete().from(User.class).execute();
-                aTweets.clear();
-
-                // Download the latest tweets
-                ArrayList<Tweet> tweets = Tweet.fromJSONArray(response);
-
-                aTweets.addAll(tweets); // TODO - add to beginning, only add if not in the list already
-                for (int i = 0; i < tweets.size(); i++) {
-                    tweets.get(i).getUser().save();
-                    tweets.get(i).save();
-
-                    //Log.e("SAVED TWEET", tweets.get(i).toString());
-                }
-
-                swipeContainer.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject responseObject) {
-                Toast.makeText(TimelineActivity.this, getResources().getString(R.string.Unable_to_connect_to_the_internet_right_now), Toast.LENGTH_SHORT).show();
-
-                // clear out list and populate from SQL db
-                aTweets.clear();
-                List<Tweet> cachedTweets = new Select()
-                        .from(Tweet.class)
-                        .orderBy("uid DESC")
-                        .execute();
-                aTweets.addAll(cachedTweets);
-                swipeContainer.setRefreshing(false);
-            }
-
-
-        });
-    }
-
-    public void postStatus() {
-
-    }
 
 
     @Override
@@ -187,16 +105,60 @@ public class TimelineActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean onComposeTweet(MenuItem mi) {
-        FragmentManager fm = getSupportFragmentManager();
-        ComposeTweetDialog.newInstance().show(fm, "fragment_compose_tweet");
-        return true;
-    }
+
+
 
 
     private Boolean isNetworkAvailable() {
         ConnectivityManager connMan = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connMan.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+
+
+
+
+
+    public static class MyPagerAdapter extends FragmentPagerAdapter {
+        private static int NUM_ITEMS = 2;
+
+        public MyPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        // Returns total number of pages
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        // Returns the fragment to display for that page
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0: // Fragment # 0 - This will show FirstFragment
+                    return HomeFragment.newInstance();
+                case 1: // Fragment # 0 - This will show FirstFragment different title
+                    return MentionFragment.newInstance();
+                default:
+                    return null;
+            }
+        }
+
+        // Returns the page title for the top indicator
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Home";
+                case 1:
+                    return "@ Mentions";
+                default:
+                    return null;
+
+            }
+        }
+
     }
 }

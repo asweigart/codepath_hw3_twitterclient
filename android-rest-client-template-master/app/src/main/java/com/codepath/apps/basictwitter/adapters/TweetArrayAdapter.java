@@ -13,8 +13,6 @@ import com.codepath.apps.basictwitter.R;
 import com.codepath.apps.basictwitter.models.Tweet;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -44,7 +42,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
             convertView = inflater.inflate(R.layout.tweet_item, parent, false);
             vh.tvText = (TextView) convertView.findViewById(R.id.tvText);
             vh.tvScreenName = (TextView) convertView.findViewById(R.id.tvScreenName);
-            vh.tvRealName = (TextView) convertView.findViewById(R.id.tvRealName);
+            vh.tvRealName = (TextView) convertView.findViewById(R.id.tvUTRealName);
             vh.tvCreatedAt = (TextView) convertView.findViewById(R.id.tvCreatedAt);
             vh.ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
             convertView.setTag(vh);

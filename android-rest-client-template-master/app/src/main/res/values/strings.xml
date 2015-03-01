@@ -20,4 +20,12 @@
     <string name="Dummy_Chars_Remaining">140</string>
     <string name="Whats_Happening">What\'s happening?</string>
     <string name="title_activity_tweet_display">TweetDisplayActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="User_Name">User Name</string>
+    <string name="Real_Name">Real Name</string>
+    <string name="Tagline">Tagline</string>
+    <string name="Followers_Following"># followers, following #</string>
+    <string name="title_activity_user_timeline">UserTimelineActivity</string>
 </resources>

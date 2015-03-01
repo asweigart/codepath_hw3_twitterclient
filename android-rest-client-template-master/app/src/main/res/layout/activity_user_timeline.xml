@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.codepath.apps.basictwitter.activities.UserTimelineActivity"
+    android:id="@+id/UTRelLayout">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/ivUTUserPhoto"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:cropToPadding="false"
+        android:paddingRight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Dummy_Screen_Name"
+        android:id="@+id/tvUTUsername"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ivUTUserPhoto"
+        android:layout_toEndOf="@+id/ivUTUserPhoto" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Dummy_Real_Name"
+        android:id="@+id/tvUTRealName"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvUTUsername"
+        android:layout_toEndOf="@+id/tvUTUsername"
+        android:paddingLeft="10dp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Tagline"
+        android:id="@+id/tvUTTagline"
+        android:layout_below="@+id/tvUTUsername"
+        android:layout_toRightOf="@+id/ivUTUserPhoto"
+        android:layout_toEndOf="@+id/ivUTUserPhoto"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textColor="#000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Followers_Following"
+        android:id="@+id/tvUTNumFollowers"
+        android:layout_below="@+id/tvUTTagline"
+        android:layout_toRightOf="@+id/ivUTUserPhoto"
+        android:layout_toEndOf="@+id/ivUTUserPhoto"
+        android:paddingBottom="25dp"
+        android:textColor="#0000CC" />
+
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/UTSwipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvUTNumFollowers">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvUserTimelineTweets"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

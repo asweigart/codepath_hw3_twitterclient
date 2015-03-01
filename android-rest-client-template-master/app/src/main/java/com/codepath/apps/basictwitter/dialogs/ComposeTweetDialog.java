@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.codepath.apps.basictwitter.R;
 import com.codepath.apps.basictwitter.TwitterApplication;
 import com.codepath.apps.basictwitter.TwitterClient;
+import com.codepath.apps.basictwitter.activities.HomeFragment;
 import com.codepath.apps.basictwitter.activities.TimelineActivity;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -114,7 +115,8 @@ public class ComposeTweetDialog extends DialogFragment {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         etNewTweet.setText("");
-                        ((TimelineActivity)getActivity()).populateTimeline();
+                        //((TimelineActivity)getActivity()).populateTimeline(); // TODO - how do I update on compose?
+                        ((HomeFragment)getParentFragment()).populateTimeline(); // TODO - this can't be right, can it?
                         dismiss();
                     }
 
